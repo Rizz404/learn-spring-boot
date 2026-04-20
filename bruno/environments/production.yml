@@ -1,0 +1,8 @@
+name: production
+variables:
+  - name: BASE_URL
+    value: http://localhost:8081/api
+  - name: API_VERSION
+    value: v1
+  - name: TIMEOUT
+    value: "10000"

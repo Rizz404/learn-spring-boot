@@ -1,0 +1,8 @@
+name: local
+variables:
+  - secret: true
+    name: BASE_URL
+  - name: API_VERSION
+    value: v1
+  - name: TIMEOUT
+    value: "10000"
