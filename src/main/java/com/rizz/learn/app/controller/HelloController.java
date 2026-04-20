@@ -3,6 +3,7 @@ package com.rizz.learn.app.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rizz.learn.app.config.AppProperties;
 import com.rizz.learn.app.services.GreetingService;
 
 /*
@@ -16,9 +17,11 @@ import com.rizz.learn.app.services.GreetingService;
 public class HelloController {
 
   private final GreetingService greetingService;
+  private final AppProperties appProperties;
 
-  public HelloController(GreetingService greetingService) {
+  public HelloController(GreetingService greetingService, AppProperties appProperties) {
     this.greetingService = greetingService;
+    this.appProperties = appProperties;
   }
 
   // * Sesi 1.1
@@ -30,7 +33,10 @@ public class HelloController {
   // * Revactor
   @GetMapping("/api/hello")
   public String helloRizz() {
-    return greetingService.generateGreeting("Rizz");
+    String greeting = greetingService.generateGreeting("Rizz");
+    String appInfo = " | App: " + appProperties.name() + " v" + appProperties.version();
+
+    return greeting + appInfo;
   }
 
 }
