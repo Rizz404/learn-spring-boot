@@ -8,12 +8,12 @@ http:
   url: "{{BASE_URL}}/products/8"
   body:
     type: json
-    data: |-
+    data: |
       {
-        "name": "product 8",
-        "description": "this is description of product 1",
-        "price": "8",
-        "category": "unknown"
+          "name": "A",
+          "description": "",
+          "price": -500,
+          "category": ""
       }
   auth: inherit
 

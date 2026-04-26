@@ -7,6 +7,8 @@ import com.rizz.learn.app.dto.ProductRequest;
 import com.rizz.learn.app.dto.ProductResponse;
 import com.rizz.learn.app.service.ProductService;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -42,13 +44,13 @@ public class ProductController {
 
   // * Jangan lupa annotationnya ya
   @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  public ProductResponse createProduct(@RequestBody ProductRequest request) {
+  @ResponseStatus(HttpStatus.CREATED) // * Tambahin @Valid biar validationnya jalan
+  public ProductResponse createProduct(@Valid @RequestBody ProductRequest request) {
     return productService.create(request);
   }
 
   @PatchMapping("/{id}")
-  public ProductResponse updateProduct(@PathVariable Long id, @RequestBody ProductRequest request) {
+  public ProductResponse updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest request) {
     return productService.update(id, request);
   }
 
