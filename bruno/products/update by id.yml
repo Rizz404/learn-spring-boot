@@ -6,6 +6,15 @@ info:
 http:
   method: PATCH
   url: "{{BASE_URL}}/products/8"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "product 8",
+        "description": "this is description of product 1",
+        "price": "8",
+        "category": "unknown"
+      }
   auth: inherit
 
 settings:

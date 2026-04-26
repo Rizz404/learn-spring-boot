@@ -5,14 +5,16 @@ info:
 
 http:
   method: GET
-  url: "{{BASE_URL}}/products?page=2&size=100"
+  url: "{{BASE_URL}}/products"
   params:
     - name: page
       value: "2"
       type: query
+      disabled: true
     - name: size
       value: "100"
       type: query
+      disabled: true
   auth: inherit
 
 settings:

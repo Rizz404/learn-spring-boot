@@ -6,6 +6,15 @@ info:
 http:
   method: POST
   url: "{{BASE_URL}}/products"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "product 1",
+        "description": "this is description of product 1",
+        "price": "1",
+        "category": "unknown"
+      }
   auth: inherit
 
 settings:

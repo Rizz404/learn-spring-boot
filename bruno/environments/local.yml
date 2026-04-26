@@ -1,7 +1,7 @@
 name: local
 variables:
-  - secret: true
-    name: BASE_URL
+  - name: BASE_URL
+    value: http://localhost:8081/api
   - name: API_VERSION
     value: v1
   - name: TIMEOUT
