@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +33,10 @@ public class ProductController {
   }
 
   @GetMapping
-  public List<ProductResponse> getAllProducts(@RequestParam(defaultValue = "1") int page,
+  public Page<ProductResponse> getAllProducts(
+      @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
-    return productService.findAll();
+    return productService.findAll(page, size);
   }
 
   @GetMapping("/{id}")
@@ -61,6 +63,52 @@ public class ProductController {
   }
 
 }
+
+// * Sesi 2.2
+// @RestController
+// @RequestMapping("/api/products")
+// public class ProductController {
+
+// private final ProductService productService;
+
+// public ProductController(ProductService productService) {
+// this.productService = productService;
+// }
+
+// @GetMapping
+// public List<ProductResponse> getAllProducts(@RequestParam(defaultValue = "1")
+// int page,
+// @RequestParam(defaultValue = "10") int size) {
+// return productService.findAll();
+// }
+
+// @GetMapping("/{id}")
+// public ProductResponse getProductById(@PathVariable Long id) {
+// return productService.findById(id);
+// }
+
+// // * Jangan lupa annotationnya ya
+// @PostMapping
+// @ResponseStatus(HttpStatus.CREATED) // * Tambahin @Valid biar validationnya
+// jalan
+// public ProductResponse createProduct(@Valid @RequestBody ProductRequest
+// request) {
+// return productService.create(request);
+// }
+
+// @PatchMapping("/{id}")
+// public ProductResponse updateProduct(@PathVariable Long id, @Valid
+// @RequestBody ProductRequest request) {
+// return productService.update(id, request);
+// }
+
+// @DeleteMapping("/{id}")
+// @ResponseStatus(HttpStatus.NO_CONTENT) // * Return status code 204
+// public void deleteProduct(@PathVariable Long id) {
+// productService.delete(id);
+// }
+
+// }
 
 // * Sesi 2.1
 /*

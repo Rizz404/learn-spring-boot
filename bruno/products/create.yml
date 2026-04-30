@@ -10,10 +10,11 @@ http:
     type: json
     data: |
       {
-          "name": "A",
-          "description": "",
-          "price": -500,
-          "category": ""
+          "name": "Product 1",
+          "description": "this is first product",
+          "price": 100,
+          "category": "new"
+        
       }
   auth: inherit
 
