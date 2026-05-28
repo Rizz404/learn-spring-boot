@@ -15,7 +15,9 @@ http:
       value: "100"
       type: query
       disabled: true
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTc3OTk4MjA0NCwiZXhwIjoxNzgwMDY4NDQ0fQ.TWWu7jCKjIqtxYs91dAmq9gG2K6FTKvk-SBFPCF-AN1PIMxek-J_ptFRlV89Coz5
 
 settings:
   encodeUrl: true
