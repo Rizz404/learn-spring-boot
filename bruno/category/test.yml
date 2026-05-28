@@ -1,0 +1,24 @@
+info:
+  name: test
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/not-found"
+  body:
+    type: json
+    data: |
+      {
+          "name": "A",
+          "description": "",
+          "price": -500,
+          "category": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

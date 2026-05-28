@@ -1,0 +1,27 @@
+info:
+  name: update by id
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{BASE_URL}}/products/1"
+  body:
+    type: json
+    data: |-
+      {
+        "id": 2,
+        "name": "Product 2",
+        "description": "this is second product",
+        "price": 200.0,
+        "category": "new",
+        "createdAt": "2026-04-26T21:28:07.7652701",
+        "updatedAt": "2026-04-26T21:28:07.7652701"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

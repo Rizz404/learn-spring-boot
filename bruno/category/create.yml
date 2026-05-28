@@ -5,15 +5,13 @@ info:
 
 http:
   method: POST
-  url: "{{BASE_URL}}/products"
+  url: "{{BASE_URL}}/categories"
   body:
     type: json
-    data: |-
+    data: |
       {
-          "name": "iPhone 17 Pro",
-          "description": "Apple flagship",
-          "price": 19999.99,
-          "categoryId": 1
+        "name": "Electronics",
+        "description": "Gadgets and devices"
       }
   auth: inherit
 

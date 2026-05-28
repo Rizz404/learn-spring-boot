@@ -1,11 +1,14 @@
 package com.rizz.learn.app.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -13,32 +16,27 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "products")
+@Table(name = "categories")
 @EntityListeners(AuditingEntityListener.class)
-public class Product {
+public class Category {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private long id;
 
-  @Column(nullable = false, length = 100)
+  @Column(nullable = false, unique = true, length = 50)
   private String name;
 
   @Column(columnDefinition = "TEXT")
   private String description;
 
-  @Column(nullable = false)
-  private Double price;
-
-  // * Relasi ke Category dengan cara eager yang auto diload untuk many to one
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "category_id", nullable = false)
-  private Category category;
+  // * LAZY artinya tidak load product ketika tidak diminta (best practice)
+  @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<Product> products = new ArrayList<>();
 
   @CreatedDate
   @Column(updatable = false)
@@ -47,18 +45,14 @@ public class Product {
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
-  // * Default constructor (wajib ada untuk Hibernate!)
-  public Product() {
+  public Category() {
   }
 
-  public Product(String name, String description, Double price, Category category) {
+  public Category(String name, String description) {
     this.name = name;
     this.description = description;
-    this.price = price;
-    this.category = category;
   }
 
-  // * Getters dan setters
   public Long getId() {
     return id;
   }
@@ -79,20 +73,8 @@ public class Product {
     this.description = description;
   }
 
-  public Double getPrice() {
-    return price;
-  }
-
-  public void setPrice(Double price) {
-    this.price = price;
-  }
-
-  public Category getCategory() {
-    return category;
-  }
-
-  public void setCategory(Category category) {
-    this.category = category;
+  public List<Product> getProducts() {
+    return products;
   }
 
   public LocalDateTime getCreatedAt() {

@@ -8,19 +8,31 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.rizz.learn.app.dto.CategoryResponse;
 import com.rizz.learn.app.dto.ProductRequest;
 import com.rizz.learn.app.dto.ProductResponse;
+import com.rizz.learn.app.entity.Category;
 import com.rizz.learn.app.entity.Product;
+import com.rizz.learn.app.repository.CategoryRepository;
 import com.rizz.learn.app.repository.ProductRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class ProductService {
 
   private final ProductRepository productRepository;
+  // * Inject entity yang berhubungan di service
+  private final CategoryRepository categoryRepository;
 
-  public ProductService(ProductRepository productRepository) {
+  public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
     this.productRepository = productRepository;
+    this.categoryRepository = categoryRepository;
+  }
+
+  private CategoryResponse toCategoryResponse(Category category) {
+    return new CategoryResponse(category.getId(), category.getName(), category.getDescription());
   }
 
   // * Mapping helper entity to response
@@ -30,7 +42,7 @@ public class ProductService {
         product.getName(),
         product.getDescription(),
         product.getPrice(),
-        product.getCategory(),
+        toCategoryResponse(product.getCategory()),
         product.getCreatedAt(),
         product.getUpdatedAt());
   }
@@ -41,6 +53,11 @@ public class ProductService {
     return productRepository.findAll(pageable).map(this::toResponse);
   }
 
+  private Category findCategoryById(Long categoryId) {
+    return categoryRepository.findById(categoryId)
+        .orElseThrow(() -> new NoSuchElementException("Category with ID " + categoryId + " not found"));
+  }
+
   // * Find by id
   public ProductResponse findById(Long id) {
     Product product = productRepository.findById(id)
@@ -49,27 +66,34 @@ public class ProductService {
   }
 
   // * Create
+  @Transactional
   public ProductResponse create(ProductRequest productRequest) {
+    Category category = findCategoryById(productRequest.categoryId());
     Product product = new Product(
         productRequest.name(),
         productRequest.description(),
         productRequest.price(),
-        productRequest.category());
+        category);
     return toResponse(productRepository.save(product));
   }
 
+  // * Update
+  @Transactional
   public ProductResponse update(Long id, ProductRequest productRequest) {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("Product with ID: %d not found".formatted(id)));
+    Category category = findCategoryById(productRequest.categoryId());
 
     product.setName(productRequest.name());
     product.setDescription(productRequest.description());
     product.setPrice(productRequest.price());
-    product.setCategory(productRequest.category());
+    product.setCategory(category);
 
     return toResponse(productRepository.save(product));
   }
 
+  // * Delete
+  @Transactional
   public void delete(Long id) {
     if (!productRepository.existsById(id)) {
       throw new NoSuchElementException("Product with ID: %d not found".formatted(id));

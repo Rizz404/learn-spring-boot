@@ -14,5 +14,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
   Page<Product> findByNameContainingIgnoreCase(String keyword, Pageable pageable);
 
   // * Auto-generated query: WHERE category = ?
-  Page<Product> findByCategory(String category, Pageable pageable);
+  Page<Product> findByCategoryId(Long categoryId, Pageable pageable);
 }
