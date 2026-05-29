@@ -10,10 +10,10 @@ http:
     type: json
     data: |-
       {
-          "name": "iPhone 17 Pro",
+          "name": "iPhone 18 Pro Max",
           "description": "Apple flagship",
           "price": 19999.99,
-          "categoryId": 1
+          "categoryId": 2
       }
   auth: inherit
 

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -37,6 +38,7 @@ public class ProductController {
   }
 
   @GetMapping
+  @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
   public Page<ProductResponse> getAllProducts(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
@@ -44,6 +46,7 @@ public class ProductController {
   }
 
   @GetMapping("/{id}")
+  @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
   public ProductResponse getProductById(@PathVariable Long id) {
     return productService.findById(id);
   }
@@ -51,18 +54,21 @@ public class ProductController {
   // * Jangan lupa annotationnya ya
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED) // * Tambahin @Valid biar validationnya jalan
+  @PreAuthorize("hasAnyRole('ADMIN')")
   public ProductResponse createProduct(@Valid @RequestBody ProductRequest request) {
     log.info("Received create product request: {}", request);
     return productService.create(request);
   }
 
   @PatchMapping("/{id}")
+  @PreAuthorize("hasAnyRole('ADMIN')")
   public ProductResponse updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest request) {
     return productService.update(id, request);
   }
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT) // * Return status code 204
+  @PreAuthorize("hasAnyRole('ADMIN')")
   public void deleteProduct(@PathVariable Long id) {
     productService.delete(id);
   }

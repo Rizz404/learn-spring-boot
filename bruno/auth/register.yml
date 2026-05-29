@@ -10,11 +10,24 @@ http:
     type: json
     data: |-
       {
-        "name": "user-1",
-        "email": "user@gmail.com",
-        "password": "12345678"
+        "email": "user@test.com",
+        "password": "password123",
+        "name": "Regular User"
       }
   auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const data = res.getBody()
+
+        if (data && data.token){
+          bru.setEnvVar("TOKEN", data.token)
+          console.log("Get token success")
+        } else{
+          console.log("Get token failed")
+        }
 
 settings:
   encodeUrl: true

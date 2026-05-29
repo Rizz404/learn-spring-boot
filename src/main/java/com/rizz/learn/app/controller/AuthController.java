@@ -1,6 +1,7 @@
 package com.rizz.learn.app.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,9 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rizz.learn.app.dto.AuthRequest;
 import com.rizz.learn.app.dto.AuthResponse;
 import com.rizz.learn.app.dto.RegisterRequest;
+import com.rizz.learn.app.entity.User;
 import com.rizz.learn.app.service.AuthService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -34,4 +38,14 @@ public class AuthController {
   public AuthResponse login(@Valid @RequestBody AuthRequest request) {
     return authService.login(request);
   }
+
+  @GetMapping("/me")
+  public AuthResponse getCurrentUser(@AuthenticationPrincipal User currentUser) {
+    return new AuthResponse(
+        null,
+        currentUser.getEmail(),
+        currentUser.getName(),
+        currentUser.getRole().name());
+  }
+
 }
