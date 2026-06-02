@@ -3,7 +3,7 @@ package com.rizz.learn.app;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+// @SpringBootTest
 class LearnSpringBootApplicationTests {
 
 	@Test

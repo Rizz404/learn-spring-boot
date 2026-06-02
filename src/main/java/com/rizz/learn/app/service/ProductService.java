@@ -19,7 +19,6 @@ import com.rizz.learn.app.repository.CategoryRepository;
 import com.rizz.learn.app.repository.ProductRepository;
 
 @Service
-@Transactional(readOnly = true)
 public class ProductService {
 
   private final ProductRepository productRepository;
@@ -48,17 +47,20 @@ public class ProductService {
   }
 
   // * Find all dengan paginasi
+  @Transactional(readOnly = true)
   public Page<ProductResponse> findAll(int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
     return productRepository.findAll(pageable).map(this::toResponse);
   }
 
+  @Transactional(readOnly = true)
   private Category findCategoryById(Long categoryId) {
     return categoryRepository.findById(categoryId)
         .orElseThrow(() -> new NoSuchElementException("Category with ID " + categoryId + " not found"));
   }
 
   // * Find by id
+  @Transactional(readOnly = true)
   public ProductResponse findById(Long id) {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("Product with ID: %d not found".formatted(id)));

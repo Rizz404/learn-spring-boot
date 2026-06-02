@@ -26,7 +26,8 @@ public class Category {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  // private long id; // ! beda jauh primitive sama wrapper
+  private Long id;
 
   @Column(nullable = false, unique = true, length = 50)
   private String name;
