@@ -18,6 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.rizz.learn.app.security.JwtAuthFilter;
 import com.rizz.learn.app.service.UserDetailsServiceImpl;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity // * Untuk aktifkan @PreAuthorize!
@@ -41,7 +43,12 @@ public class SecurityConfig {
             // * Semua endpoint lain wajib authenticated
             .anyRequest().authenticated())
         .authenticationProvider(authenticationProvider())
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+        // * Biar no token dapet 401 bukan 403
+        .exceptionHandling(ex -> ex
+            .authenticationEntryPoint((request, response, authException) -> {
+              response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            }));
 
     return http.build();
   }
