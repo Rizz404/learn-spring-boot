@@ -5,19 +5,15 @@ info:
 
 http:
   method: GET
-  url: "{{BASE_URL}}/products"
+  url: "{{BASE_URL}}/products?page=0&size=20"
   params:
     - name: page
-      value: "2"
+      value: "0"
       type: query
-      disabled: true
     - name: size
-      value: "100"
+      value: "20"
       type: query
-      disabled: true
-  auth:
-    type: bearer
-    token: eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTc3OTk4MjA0NCwiZXhwIjoxNzgwMDY4NDQ0fQ.TWWu7jCKjIqtxYs91dAmq9gG2K6FTKvk-SBFPCF-AN1PIMxek-J_ptFRlV89Coz5
+  auth: inherit
 
 settings:
   encodeUrl: true
