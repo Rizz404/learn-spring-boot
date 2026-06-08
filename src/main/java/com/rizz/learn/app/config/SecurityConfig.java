@@ -40,6 +40,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             // * Endpoint publik — boleh diakses siapa saja
             .requestMatchers(("/api/auth/**")).permitAll()
+            // .requestMatchers("/error").permitAll()
             // * Semua endpoint lain wajib authenticated
             .anyRequest().authenticated())
         .authenticationProvider(authenticationProvider())

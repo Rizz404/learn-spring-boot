@@ -3,6 +3,9 @@ package com.rizz.learn.app.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,6 +51,7 @@ public class ProductService {
 
   // * Find all dengan paginasi
   @Transactional(readOnly = true)
+  @Cacheable(value = "products", key = "#page + '-' + #size")
   public Page<ProductResponse> findAll(int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
     return productRepository.findAll(pageable).map(this::toResponse);
@@ -61,6 +65,7 @@ public class ProductService {
 
   // * Find by id
   @Transactional(readOnly = true)
+  @Cacheable(value = "product", key = "#id")
   public ProductResponse findById(Long id) {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("Product with ID: %d not found".formatted(id)));
@@ -81,6 +86,7 @@ public class ProductService {
 
   // * Update
   @Transactional
+  @CachePut(value = "product", key = "#id")
   public ProductResponse update(Long id, ProductRequest productRequest) {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("Product with ID: %d not found".formatted(id)));
@@ -96,6 +102,7 @@ public class ProductService {
 
   // * Delete
   @Transactional
+  @CacheEvict(value = { "products", "product" }, allEntries = true)
   public void delete(Long id) {
     if (!productRepository.existsById(id)) {
       throw new NoSuchElementException("Product with ID: %d not found".formatted(id));

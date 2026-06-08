@@ -10,10 +10,9 @@ http:
     type: json
     data: |-
       {
-        "email": "user@gmail.com",
-        "password": "12345678"
+        "email": "user@test.com",
+        "password": "password123",
       }
-  auth: inherit
 
 runtime:
   scripts:
