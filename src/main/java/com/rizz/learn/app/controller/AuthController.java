@@ -16,7 +16,6 @@ import com.rizz.learn.app.service.AuthService;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -40,12 +39,9 @@ public class AuthController {
   }
 
   @GetMapping("/me")
-  public AuthResponse getCurrentUser(@AuthenticationPrincipal User currentUser) {
-    return new AuthResponse(
-        null,
-        currentUser.getEmail(),
-        currentUser.getName(),
-        currentUser.getRole().name());
+  public AuthResponse getCurrentUser(
+      @AuthenticationPrincipal org.springframework.security.core.userdetails.UserDetails principal) {
+    return authService.getCurrentUser(principal.getUsername());
   }
 
 }

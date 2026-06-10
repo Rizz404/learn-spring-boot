@@ -6,3 +6,7 @@ variables:
     value: v1
   - name: TIMEOUT
     value: "10000"
+  - name: TOKEN
+    value: eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJyaW5udGhlbm90YWJsZUBnbWFpbC5jb20iLCJpYXQiOjE3ODEwNjMyMjIsImV4cCI6MTc4MTE0OTYyMn0.d0uDJ1XwFwUpQcn2sGJypSMY_J8vovS7-EFjHlkxdfLnMCGHsOUoyUxLva2KXGHz
+  - name: BASE_URL_WITHOUT_API
+    value: http://localhost:8081

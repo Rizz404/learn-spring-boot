@@ -40,8 +40,9 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             // * Endpoint publik — boleh diakses siapa saja
             .requestMatchers(("/api/auth/**")).permitAll()
-            // .requestMatchers("/error").permitAll()
-            // * Semua endpoint lain wajib authenticated
+            // * Actuator — health boleh publik, sisanya harus ADMIN
+            .requestMatchers("/actuator/health").permitAll()
+            .requestMatchers("/actuator/**").hasRole("ADMIN") // * Semua endpoint lain wajib authenticated
             .anyRequest().authenticated())
         .authenticationProvider(authenticationProvider())
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

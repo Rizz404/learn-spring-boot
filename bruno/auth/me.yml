@@ -1,19 +1,19 @@
 info:
-  name: register
+  name: me
   type: http
-  seq: 1
+  seq: 3
 
 http:
-  method: POST
-  url: "{{BASE_URL}}/auth/register"
+  method: GET
+  url: "{{BASE_URL}}/auth/me"
   body:
     type: json
     data: |-
       {
-        "email": "rinnthenotable@gmail.com",
-        "password": "123456789",
-        "name": "Rinn"
+        "email": "user@test.com",
+        "password": "password123"
       }
+  auth: inherit
 
 runtime:
   scripts:

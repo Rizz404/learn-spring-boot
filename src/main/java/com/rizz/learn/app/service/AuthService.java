@@ -2,6 +2,7 @@ package com.rizz.learn.app.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,5 +57,16 @@ public class AuthService {
         .orElseThrow();
     String token = jwtService.generateToken(user);
     return new AuthResponse(token, user.getEmail(), user.getName(), user.getRole().name());
+  }
+
+  public AuthResponse getCurrentUser(String email) {
+    var user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+    return new AuthResponse(
+        null,
+        user.getEmail(),
+        user.getName(),
+        user.getRole().name());
   }
 }
