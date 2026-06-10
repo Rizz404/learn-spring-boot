@@ -1,11 +1,10 @@
 package com.rizz.learn.app.service;
 
+import com.rizz.learn.app.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.rizz.learn.app.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -18,14 +17,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    var user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new UsernameNotFoundException("User with the email " + email + " not found"));
+    var user =
+        userRepository
+            .findByEmail(email)
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User with the email " + email + " not found"));
 
-    return org.springframework.security.core.userdetails.User
-        .withUsername(user.getEmail())
+    return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
         .password(user.getPassword())
         .authorities("ROLE_" + user.getRole().name())
         .build();
   }
-
 }

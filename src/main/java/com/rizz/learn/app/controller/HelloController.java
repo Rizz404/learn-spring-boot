@@ -1,10 +1,9 @@
 package com.rizz.learn.app.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.rizz.learn.app.config.AppProperties;
 import com.rizz.learn.app.services.GreetingService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /*
 @Component: Tanda paling umum (General purpose).
@@ -38,5 +37,4 @@ public class HelloController {
 
     return greeting + appInfo;
   }
-
 }

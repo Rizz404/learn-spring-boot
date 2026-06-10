@@ -1,16 +1,5 @@
 package com.rizz.learn.app.entity;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -20,6 +9,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
@@ -27,7 +25,8 @@ import jakarta.persistence.Table;
 public class User implements UserDetails {
 
   public enum Role {
-    USER, ADMIN
+    USER,
+    ADMIN
   }
 
   @Id
@@ -51,11 +50,9 @@ public class User implements UserDetails {
   @Column(updatable = false)
   private LocalDateTime createdAt;
 
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
+  @LastModifiedDate private LocalDateTime updatedAt;
 
-  public User() {
-  }
+  public User() {}
 
   public User(String email, String password, String name, Role role) {
     this.email = email;

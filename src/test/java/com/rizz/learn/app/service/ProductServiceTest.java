@@ -6,42 +6,31 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
 import com.rizz.learn.app.dto.ProductRequest;
 import com.rizz.learn.app.dto.ProductResponse;
 import com.rizz.learn.app.entity.Category;
 import com.rizz.learn.app.entity.Product;
 import com.rizz.learn.app.repository.CategoryRepository;
 import com.rizz.learn.app.repository.ProductRepository;
-
-import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
   // * Buat mock harus pakai annotaion mock
-  @Mock
-  private ProductRepository productRepository;
+  @Mock private ProductRepository productRepository;
 
-  @Mock
-  private CategoryRepository categoryRepository;
+  @Mock private CategoryRepository categoryRepository;
 
   // ! yang di moc repository dan logika jangan di mock tapi di injectmoc buat
   // ! ngetes yang di moc itu
-  @InjectMocks
-  private ProductService productService;
+  @InjectMocks private ProductService productService;
 
   // * Buat dummy
   private Category dummyCategory() {
@@ -69,7 +58,6 @@ public class ProductServiceTest {
     assertThat(result.price()).isEqualTo(19999.99);
     assertThat(result.category().name()).isEqualTo("Electronics");
     verify(productRepository).findById(1L);
-
   }
 
   @Test

@@ -1,16 +1,9 @@
 package com.rizz.learn.app.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.rizz.learn.app.dto.ProductRequest;
 import com.rizz.learn.app.dto.ProductResponse;
 import com.rizz.learn.app.service.ProductService;
-
 import jakarta.validation.Valid;
-
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,8 +15,10 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/products")
@@ -40,8 +35,7 @@ public class ProductController {
   @GetMapping
   @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
   public Page<ProductResponse> getAllProducts(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size) {
+      @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
     return productService.findAll(page, size);
   }
 
@@ -62,7 +56,8 @@ public class ProductController {
 
   @PatchMapping("/{id}")
   @PreAuthorize("hasAnyRole('ADMIN')")
-  public ProductResponse updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest request) {
+  public ProductResponse updateProduct(
+      @PathVariable Long id, @Valid @RequestBody ProductRequest request) {
     return productService.update(id, request);
   }
 
@@ -72,7 +67,6 @@ public class ProductController {
   public void deleteProduct(@PathVariable Long id) {
     productService.delete(id);
   }
-
 }
 
 // * Sesi 2.2

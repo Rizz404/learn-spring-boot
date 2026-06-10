@@ -1,8 +1,13 @@
 package com.rizz.learn.app.service;
 
-import java.util.List;
+import com.rizz.learn.app.dto.CategoryResponse;
+import com.rizz.learn.app.dto.ProductRequest;
+import com.rizz.learn.app.dto.ProductResponse;
+import com.rizz.learn.app.entity.Category;
+import com.rizz.learn.app.entity.Product;
+import com.rizz.learn.app.repository.CategoryRepository;
+import com.rizz.learn.app.repository.ProductRepository;
 import java.util.NoSuchElementException;
-
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,14 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.rizz.learn.app.dto.CategoryResponse;
-import com.rizz.learn.app.dto.ProductRequest;
-import com.rizz.learn.app.dto.ProductResponse;
-import com.rizz.learn.app.entity.Category;
-import com.rizz.learn.app.entity.Product;
-import com.rizz.learn.app.repository.CategoryRepository;
-import com.rizz.learn.app.repository.ProductRepository;
-
 @Service
 public class ProductService {
 
@@ -28,7 +25,8 @@ public class ProductService {
   // * Inject entity yang berhubungan di service
   private final CategoryRepository categoryRepository;
 
-  public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+  public ProductService(
+      ProductRepository productRepository, CategoryRepository categoryRepository) {
     this.productRepository = productRepository;
     this.categoryRepository = categoryRepository;
   }
@@ -59,16 +57,21 @@ public class ProductService {
 
   @Transactional(readOnly = true)
   private Category findCategoryById(Long categoryId) {
-    return categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new NoSuchElementException("Category with ID " + categoryId + " not found"));
+    return categoryRepository
+        .findById(categoryId)
+        .orElseThrow(
+            () -> new NoSuchElementException("Category with ID " + categoryId + " not found"));
   }
 
   // * Find by id
   @Transactional(readOnly = true)
   @Cacheable(value = "product", key = "#id")
   public ProductResponse findById(Long id) {
-    Product product = productRepository.findById(id)
-        .orElseThrow(() -> new NoSuchElementException("Product with ID: %d not found".formatted(id)));
+    Product product =
+        productRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new NoSuchElementException("Product with ID: %d not found".formatted(id)));
     return toResponse(product);
   }
 
@@ -76,11 +79,9 @@ public class ProductService {
   @Transactional
   public ProductResponse create(ProductRequest productRequest) {
     Category category = findCategoryById(productRequest.categoryId());
-    Product product = new Product(
-        productRequest.name(),
-        productRequest.description(),
-        productRequest.price(),
-        category);
+    Product product =
+        new Product(
+            productRequest.name(), productRequest.description(), productRequest.price(), category);
     return toResponse(productRepository.save(product));
   }
 
@@ -88,8 +89,11 @@ public class ProductService {
   @Transactional
   @CachePut(value = "product", key = "#id")
   public ProductResponse update(Long id, ProductRequest productRequest) {
-    Product product = productRepository.findById(id)
-        .orElseThrow(() -> new NoSuchElementException("Product with ID: %d not found".formatted(id)));
+    Product product =
+        productRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new NoSuchElementException("Product with ID: %d not found".formatted(id)));
     Category category = findCategoryById(productRequest.categoryId());
 
     product.setName(productRequest.name());
@@ -102,14 +106,15 @@ public class ProductService {
 
   // * Delete
   @Transactional
-  @CacheEvict(value = { "products", "product" }, allEntries = true)
+  @CacheEvict(
+      value = {"products", "product"},
+      allEntries = true)
   public void delete(Long id) {
     if (!productRepository.existsById(id)) {
       throw new NoSuchElementException("Product with ID: %d not found".formatted(id));
     }
     productRepository.deleteById(id);
   }
-
 }
 
 // * Sesi 2.2
