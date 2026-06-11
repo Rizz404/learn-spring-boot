@@ -5,18 +5,18 @@ info:
 
 http:
   method: PATCH
-  url: "{{BASE_URL}}/products/5"
+  url: "{{BASE_URL}}/products/236"
   body:
     type: json
     data: |-
       {
-        "id": 5,
-        "name": "Product 5",
-        "description": "this is second product",
-        "price": 200.0,
-        "category": "new",
-        "createdAt": "2026-04-26T21:28:07.7652701",
-        "updatedAt": "2026-04-26T21:28:07.7652701"
+        "id": 236,
+        "name": "Updated Dell Laptop 231",
+        "description": "Description for Dell Laptop model 231",
+        "price": 3043.73,
+        "category": 2,
+        "createdAt": "2026-05-29T00:37:48.603955",
+        "updatedAt": "2026-05-16T20:03:20.271803"
       }
   auth: inherit
 

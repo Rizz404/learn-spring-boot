@@ -16,7 +16,7 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 @EnableCaching
 public class LearnSpringBootApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(LearnSpringBootApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(LearnSpringBootApplication.class, args);
+    }
 }
