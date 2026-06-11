@@ -8,12 +8,14 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
 @EnableJpaAuditing
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @EnableCaching
+@EnableScheduling
 public class LearnSpringBootApplication {
 
     public static void main(String[] args) {
