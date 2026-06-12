@@ -10,9 +10,13 @@ public class NotificationService {
 
     private static final Logger log = LoggerFactory.getLogger(NotificationService.class);
 
-    @Async
+    @Async("notificationExecutor")
     public void sendWelcomeNotification(String email, String name) {
         log.info("Start sending welcome notification to email={} name={}", email, name);
+
+        if (email.contains("fail")) {
+            throw new IllegalArgumentException("Simulated async notification failure");
+        }
 
         try {
             Thread.sleep(3000);
@@ -20,7 +24,7 @@ public class NotificationService {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             log.error("Welcome notification interrupted for email={}", email, e);
-
+            throw new IllegalStateException("Notification sending interrupted", e);
         }
     }
 }

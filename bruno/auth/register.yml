@@ -10,9 +10,9 @@ http:
     type: json
     data: |-
       {
-        "email": "rinnthenotable@gmail.com",
-        "password": "123456789",
-        "name": "Rinn"
+        "email": "async-fail@gmail.com",
+        "password": "password123",
+        "name": "Async Fail"
       }
 
 runtime:
