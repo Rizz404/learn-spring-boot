@@ -1,10 +1,5 @@
 package com.rizz.learn.app.service;
 
-import com.rizz.learn.app.dto.AuthRequest;
-import com.rizz.learn.app.dto.AuthResponse;
-import com.rizz.learn.app.dto.RegisterRequest;
-import com.rizz.learn.app.entity.User;
-import com.rizz.learn.app.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,59 +7,73 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rizz.learn.app.dto.AuthRequest;
+import com.rizz.learn.app.dto.AuthResponse;
+import com.rizz.learn.app.dto.RegisterRequest;
+import com.rizz.learn.app.entity.User;
+import com.rizz.learn.app.repository.UserRepository;
+
 @Service
 @Transactional(readOnly = true)
 public class AuthService {
 
-  private final UserRepository userRepository;
-  private final PasswordEncoder passwordEncoder;
-  private final JwtService jwtService;
-  private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+    private final NotificationService notificationService;
 
-  public AuthService(
-      UserRepository userRepository,
-      PasswordEncoder passwordEncoder,
-      JwtService jwtService,
-      AuthenticationManager authenticationManager) {
-    this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
-    this.jwtService = jwtService;
-    this.authenticationManager = authenticationManager;
-  }
-
-  @Transactional
-  public AuthResponse register(RegisterRequest request) {
-    if (userRepository.existsByEmail(request.email())) {
-      throw new IllegalArgumentException("Email sudah terdaftar");
+    public AuthService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService,
+            AuthenticationManager authenticationManager,
+            NotificationService notificationService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+        this.notificationService = notificationService;
     }
 
-    User user =
-        new User(
-            request.email(),
-            passwordEncoder.encode(request.password()),
-            request.name(),
-            User.Role.USER);
+    @Transactional
+    public AuthResponse register(RegisterRequest request) {
+        if (userRepository.existsByEmail(request.email())) {
+            throw new IllegalArgumentException("Email sudah terdaftar");
+        }
 
-    userRepository.save(user);
-    String token = jwtService.generateToken(user);
-    return new AuthResponse(token, user.getEmail(), user.getName(), user.getRole().name());
-  }
+        User user
+                = new User(
+                        request.email(),
+                        passwordEncoder.encode(request.password()),
+                        request.name(),
+                        User.Role.USER);
 
-  public AuthResponse login(AuthRequest request) {
-    authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+        userRepository.save(user);
 
-    User user = userRepository.findByEmail(request.email()).orElseThrow();
-    String token = jwtService.generateToken(user);
-    return new AuthResponse(token, user.getEmail(), user.getName(), user.getRole().name());
-  }
+        var token = jwtService.generateToken(user);
+        var response = new AuthResponse(token, user.getEmail(), user.getName(), user.getRole().name());
 
-  public AuthResponse getCurrentUser(String email) {
-    var user =
-        userRepository
-            .findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        notificationService.sendWelcomeNotification(user.getEmail(), user.getName());
 
-    return new AuthResponse(null, user.getEmail(), user.getName(), user.getRole().name());
-  }
+        return response;
+    }
+
+    public AuthResponse login(AuthRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+
+        User user = userRepository.findByEmail(request.email()).orElseThrow();
+        String token = jwtService.generateToken(user);
+        return new AuthResponse(token, user.getEmail(), user.getName(), user.getRole().name());
+    }
+
+    public AuthResponse getCurrentUser(String email) {
+        var user
+                = userRepository
+                        .findByEmail(email)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return new AuthResponse(null, user.getEmail(), user.getName(), user.getRole().name());
+    }
 }
